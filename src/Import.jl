@@ -7,6 +7,14 @@ export use_package
 
 Automatic way to use packages (built with container environments in mind)
 
+### Usage
+    `SciScriptTools.Import.use_package("JuLIP", update = true)`
+    using JuLIP
+
+the `using JuLIP` part brings the module and exported functions into the current scope
+ie can use `AbstractAtoms` rather than `JuLIP.AbstractAtoms`
+TODO: figure out way to do this from within the function
+
 ### Arguments
 - `package::string`: package name
 - `repo::string`: repository link
