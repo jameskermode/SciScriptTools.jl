@@ -42,13 +42,13 @@ function use_package(package; repo = nothing, update = false, branch = "master" 
         Pkg.clone(repo)
     end
 
-    use_string = string("using", " $package")
-    use = parse(use_string)
-
     if update == true
         print("Pkg.checkout($package, $branch)\n")
         Pkg.checkout(package, branch)
     end
+
+    use_string = string("using", " $package")
+    use = parse(use_string)
 
     print(string(use_string, "\n"))
     eval(use)
