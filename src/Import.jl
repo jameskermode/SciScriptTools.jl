@@ -9,9 +9,9 @@ Automatic way to use packages (built with container environments in mind)
 
 ### Usage
     `SciScriptTools.Import.use_package("JuLIP", update = true)`
-    using JuLIP
+    using JuLIP  # optional
 
-the `using JuLIP` part brings the module and exported functions into the current scope
+the optional `using JuLIP` brings the module and exported functions into the current scope
 ie can use `AbstractAtoms` rather than `JuLIP.AbstractAtoms`
 TODO: figure out way to do this from within the function
 
@@ -22,31 +22,33 @@ TODO: figure out way to do this from within the function
 """
 function use_package(package; repo = nothing, update = false, branch = "master" )
 
-    # check if package already exists or is registered, clone if not
+    # check if package is already installed or registered, clone if not
     try
         if Pkg.installed(package) == nothing
-            info("Package '$package' is registered\n")
-            info("Pkg.add($package)\n")
+            info("Package '$package' is registered")
+            info("Executing `Pkg.add($package)`")
             Pkg.add(package)
         else
-            info("Package '$package' is installed\n")
+            info("Package '$package' is installed")
         end
     catch
-        info("Package '$package' is not installed or registered, trying to clone repository\n")
-        if repo == nothing error("No repository link given\n") end
-        info("Pkg.clone($repo)\n")
+        info("Package '$package' is not installed or registered, trying to clone repository")
+        if repo == nothing error("No repository link given") end
+        info("Executing `Pkg.clone($repo)`")
         Pkg.clone(repo)
     end
 
+    # checkout a particular branch or version of the package
     if update == true
-        info("Pkg.checkout($package, $branch)\n")
+        info("Executing `Pkg.checkout($package, $branch)`")
         Pkg.checkout(package, branch)
     end
 
+    # excute `using $package`
     use_string = string("using", " $package")
     use = parse(use_string)
+    info(string("Executing ", "`", use_string, "`"))
 
-    info(string(use_string, "\n"))
     eval(use)
 end
 
