@@ -3,7 +3,7 @@ module Import
 export use_package
 
 """
-`use_package(package; repo = nothing, update = false, branch = "master" )`
+`use_package(package; repo = nothing, update = false, checkout = false, branch = "master")`
 
 Automatic way to use packages (built with container environments in mind)
 
@@ -19,9 +19,10 @@ TODO: figure out way to do this from within the function
 ### Arguments
 - `package::string`: package name
 - `repo::string`: repository link
-- `update::Boolean`: update package
+- `update::Boolean`: update package to latest version
+- `checkout::Boolean`: checkout specific branch of package
 """
-function use_package(package; repo = nothing, update = false, branch = "master" )
+function use_package(package; repo = nothing, update = false, checkout = false, branch = "master")
 
     # check if package is already installed or registered, clone if not
     try
@@ -39,12 +40,18 @@ function use_package(package; repo = nothing, update = false, branch = "master" 
         Pkg.clone(repo)
     end
 
-    # checkout a particular branch or version of the package
-    if update == true
+    if checkout == true
+        # checkout a particular branch or version of the package
+        # checkout will not update other packages
         info("Executing `Pkg.checkout($package, $branch)`")
         Pkg.checkout(package, branch)
+    elseif update == true
+        # update package to lastest version
+        # update also updates other packages
+        info("Executing `Pkg.update($package)`")
+        Pkg.update(package)
     end
-
+    
     # excute `using $package`
     use_string = string("using", " $package")
     use = parse(use_string)
