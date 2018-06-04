@@ -1,5 +1,6 @@
 module ArrayProperty
 
+    export estimate_y_given_x, monotonically_increasing
 
     function monotonically_increasing(x::Array{Float64})
         for i in 1:length(x)-1
