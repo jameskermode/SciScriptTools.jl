@@ -47,7 +47,7 @@ module ArrayProperty
     """
     `estimate_y_given_x(x_g::Float64, y::Array{Float64}, x::Array{Float64}; round_dp = 5, verbose = 0)`
 
-    ### Arguements
+    ### Arguments
     - x_g::Float64 : given x
     - y::Array{Float64}
     - x::Array{Float64}
@@ -133,7 +133,7 @@ module ArrayProperty
      Once/if the mean gradient of the end points reachs `gtol`, x is considered converged.
      If `gtol` is not reached warning appears and last value in array is chosen 
      
-    ### Arguements
+    ### Arguments
     - x::Array{Float64}
     - gtol = 1e-5 : convergence tolerance for gradient
     - width = 10 : number of array points to be considered for the mean gradient
