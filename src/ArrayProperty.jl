@@ -1,6 +1,7 @@
 module ArrayProperty
 
-    export estimate_y_given_x, monotonically_increasing
+    export strictly_increasing, strictly_decreasing, monotonically_increasing, 
+                monotonically_decreasing, estimate_y_given_x
 
     # would be nice to have function that tells you want type it is
     # instead of having to check each one what it is
