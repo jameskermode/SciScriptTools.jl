@@ -1,6 +1,6 @@
 module IO
 
-export createdir
+export create_dir
 
     """
     `createdir(path::String)`
@@ -8,7 +8,7 @@ export createdir
     Create a directory of given path.
     Provide warning if it already exists.
     """
-    function createdir(path::String)
+    function create_dir(path::String)
 
         if isdir(path) == false
             mkpath(path)
