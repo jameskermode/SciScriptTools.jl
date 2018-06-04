@@ -11,6 +11,17 @@ module ArrayProperty
         return true
     end
 
+    """
+    `estimate_y_given_x(x_g::Float64, y::Array{Float64}, x::Array{Float64}; round_dp = 5, verbose = 0)`
+
+    ### Arguements
+    - x_g::Float64 : given x
+    - y::Array{Float64}
+    - x::Array{Float64}
+    #### Optional
+    - round_dp::Int = 5 : round x array to given decimal places
+    - verbose = 0 : 0 = info, 1 = extra information
+    """
     function estimate_y_given_x(x_g::Float64, y::Array{Float64}, x::Array{Float64}; round_dp = 5, verbose = 0)
 
         y_g = false
