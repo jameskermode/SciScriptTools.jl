@@ -1,7 +1,9 @@
 module ArrayProperty
 
     export strictly_increasing, strictly_decreasing, monotonically_increasing, 
-                monotonically_decreasing, estimate_y_given_x
+                monotonically_decreasing, estimate_y_given_x, 
+                converged_gradient_mean, converged_gradient_point
+
 
     # would be nice to have function that tells you want type it is
     # instead of having to check each one what it is
@@ -124,6 +126,74 @@ module ArrayProperty
         return false
     end
 
+    """
+     `converged_gradient_mean(x::Array{Float64}; gtol = 1e-5, width = 10)`
+
+     Uses the gradient of the array to determine the convergence.
+     Once/if the mean gradient of the end points reachs `gtol`, x is considered converged.
+     If `gtol` is not reached warning appears and last value in array is chosen 
+     
+    ### Arguements
+    - x::Array{Float64}
+    - gtol = 1e-5 : convergence tolerance for gradient
+    - width = 10 : number of array points to be considered for the mean gradient
+    ### Returns
+    - value of x at converged gradient point
+    - index of that value
+    """
+    function converged_gradient_mean(x::Array{Float64}; gtol = 1e-5, width = 10)
+    
+        gx = gradient(x)
+
+        gx_con = mean(gx[length(gx)-width:length(gx)])
+        for i in 1:length(gx)-width
+            if abs.(gx[i] - gx_con) <= gtol
+                return x[i], i
+            end
+        end  
+        
+        for i in length(gx)-width:length(gx)-1
+            w = length(gx) - i
+            gx_con = mean(gx[i:length(gx)])
+            if abs.(gx[i] - gx_con) <= gtol
+                warn("Changed mean wdith: ", w)
+                warn("tolerance reached: ",  abs.(gx[i] - gx_con))
+                return x[i], i
+            end
+        end
+
+        i = length(x)
+        warn("array not converged to tolerance: ", gtol, ", last value in array given")
+        warn("tolerance reached: ",  abs.(gx[i] - gx_con))
+        return x[i], i
+    end
+
+    """
+    `converged_gradient_point(x::Array{Float64}; gtol = 1e-5)`
+
+    Uses the gradient of the array to determine the convergence.
+    Once/if the gradient reachs `gtol`, x is considered converged.
+    If `gtol` is not reached warning appears and last value in array is chosen 
+
+    ### Returns
+    - value of x at converged gradient point
+    - index of that value
+    """
+    function converged_gradient_point(x::Array{Float64}; gtol = 1e-5)
+
+        gx = gradient(x)
+        p = find(abs.(gx) .<= gtol )
+        if length(p) >= 1
+            return x[p[1]], p[1]
+        end
+
+        if length(p) == 0
+            l = length(gx)
+            warn("array not converged to tolerance: ", gtol)
+            warn("gradient reached: ",  gx[l])
+            return x[l], l
+        end
+    end
 
 
 end # module
