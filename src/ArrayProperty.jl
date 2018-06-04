@@ -2,9 +2,39 @@ module ArrayProperty
 
     export estimate_y_given_x, monotonically_increasing
 
+    # would be nice to have function that tells you want type it is
+    # instead of having to check each one what it is
+    function strictly_increasing(x::Array{Float64})
+
+        for i in 1:length(x)-1
+            if x[i+1] <= x[i]
+                return false
+            end
+        end
+        return true
+    end
+
+    function strictly_decreasing(x::Array{Float64})
+        for i in 1:length(x)-1
+            if x[i+1] >= x[i]
+                return false
+            end
+        end
+        return true
+    end
+
     function monotonically_increasing(x::Array{Float64})
         for i in 1:length(x)-1
             if x[i+1] < x[i]
+                return false
+            end
+        end
+        return true
+    end
+
+    function monotonically_decreasing(x::Array{Float64})
+        for i in 1:length(x)-1
+            if x[i+1] > x[i]
                 return false
             end
         end
