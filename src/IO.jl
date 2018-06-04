@@ -3,7 +3,7 @@ module IO
 export create_dir
 
     """
-    `createdir(path::String)`
+    `create_dir(path::String)`
 
     Create a directory of given path.
     Provide warning if it already exists.
