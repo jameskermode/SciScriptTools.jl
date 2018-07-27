@@ -2,10 +2,11 @@
 
 module SciScriptTools
 
-include("Import.jl")
-include("IO.jl")
-include("ArrayProperty.jl")
-include("Comparison.jl")
-include("Conversion.jl")
+    include("Import.jl")
+    include("IO.jl")
+    include("ArrayProperty.jl")
+    include("Comparison.jl")
+    include("Conversion.jl")
+    include("Optimise.jl")
 
 end # module
