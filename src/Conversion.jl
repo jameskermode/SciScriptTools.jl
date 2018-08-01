@@ -32,7 +32,7 @@ module Conversion
     end
 
     """
-    `pair_to_list(pairs::Array{Tuple}; split = false)`
+    `pair_to_list{T<:Any}(pairs::Array{Tuple{T, T}}; split = false)`
 
     Takes array of tuples and returns flatten array.
 
@@ -41,16 +41,18 @@ module Conversion
     - `split = false` : `false` flattens tuple by tuple,
                         `true` returns with first index of all tuples than second index of all tuples
     """
+    # this can be generalised to Tuples of any length rather than just pairs, could turn into flat array or matrix
     pair_to_list(pair::Tuple) = [pair[1], pair[2]]
-    function pair_to_list(pairs::Array{Tuple}; split = false)
+    function pair_to_list{T<:Any}(pairs::Array{Tuple{T, T}}; split = false)
 
         len = length(pairs)
         list = nothing
-        
+
         # initialise array with type
-        if typeof(pairs[1][1]) == typeof(pairs[1][2]) list = Array{typeof(pairs[1])}(len*2)
-        else list =Array{Any}(len*2) end
-            
+        if typeof(pairs[1][1]) == typeof(pairs[1][2]) list = Array{typeof(pairs[1][1])}(len*2)
+        else list =Array{Any}(len*2)
+        end
+
         # flatten tuples one by one
         if split == false
             for i in 1:len
