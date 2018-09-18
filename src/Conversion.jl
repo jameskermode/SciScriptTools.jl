@@ -1,6 +1,6 @@
 module Conversion
 
-    export dict_convert_keys, pair_to_list
+    export dict_convert_keys, dict_to_arrays, pair_to_list
 
     """
     `dict_convert_keys(dict::Dict)`
@@ -25,6 +25,43 @@ module Conversion
         end
 
         return dict_c 
+    end
+
+    """
+    `dict_to_arrays(dict::Dict; key_order::Array{Symbol} = Array{Symbol}([]))`
+
+    Convert dictionary into two arrays, returns array of arrays and array of keys in the same order.
+    Can extract and/or order certain arrays using `key_order`.
+
+    ### Arguments
+    - `dict::Dict`
+
+    ### Optional Arguments
+    - `key_order::Array{Symbol}` : list of keys to extract from dictionary, arrays will return in this order
+
+    ### Returns
+    - `arrays` : array object of arrays
+    - `key_order` : list of keys in the order of arrays object
+    """
+    function dict_to_arrays(dict::Dict; key_order::Array{Symbol} = Array{Symbol}([]))
+
+        # get all keys if no keys given
+        if length(key_order) == 0 key_order = Array{Symbol}(collect(keys(dict))) end
+
+        # generate and assign dictionary arrays to an array in order of the keys
+        arrays = Array{Any, 1}(length(key_order))
+        for i in 1:length(key_order)
+            arrays[i] = dict[key_order[i]]
+        end
+
+        # try apply target type to all arrays, if it fails, variable arrays will be of type Any
+        target_type = typeof(arrays[1][1])
+        try arrays = Array{target_type}.(arrays)
+        catch debug("Automatic conversion of types failed to apply to all, no singular type") end
+
+        # returning `key_order` is redundent when optional argument for `key_order` is provided
+        # rather than just return `arrays`, keep the consistency of always returning the same number of objects
+        return arrays, key_order
     end
 
     """
