@@ -1,6 +1,13 @@
 module Conversion
 
+    using Logging: debug
+
     export dict_convert_keys, dict_to_arrays, pair_to_list
+
+    # Logging
+    # to display logging levels, use
+    # `using Logging: DEBUG`
+    # `Logging.configure(level=DEBUG)`
 
     """
     `dict_convert_keys(dict::Dict)`
