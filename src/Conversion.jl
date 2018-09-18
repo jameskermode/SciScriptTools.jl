@@ -3,30 +3,25 @@ module Conversion
     export dict_convert_keys, pair_to_list
 
     """
-    `dict_convert_keys(dict)`
+    `dict_convert_keys(dict::Dict)`
 
     'Converts' dictionary keys of strings/symbols to keys of symbols/strings.
     If dictionary contains mixed strings and symbols it converts all the keys to symbols.
     Returns new dictionary.
     """
-    function dict_convert_keys(dict)
-        
+    function dict_convert_keys(dict::Dict)
+
         dk = collect(keys(dict))
-        if typeof(dk) == Array{String,1} t = "t_string" end
+        t = nothing
         if typeof(dk) == Array{Symbol,1} t = "t_symbol" end
-        if typeof(dk) == Array{Any,1} t = "t_mixed" end # check if keys are mix of strings and symbols
-        
+
         dict_c = nothing
         if t == "t_symbol" dict_c = Dict{String, Any}()
         else dict_c = Dict{Symbol, Any}() end
 
         for i in 1:length(dk)
-            try
-                if t == "t_string" dict_c[Symbol(dk[i])] = dict[dk[i]] end
-                if t == "t_symbol" dict_c[String(dk[i])] = dict[dk[i]] end
-                if t == "t_mixed" dict_c[Symbol(dk[i])] = dict[dk[i]] end # convert mixed keys into symbols
-            catch
-            end
+            if t == "t_symbol" dict_c[String(dk[i])] = dict[dk[i]] # convert symbols into strings
+            else dict_c[Symbol(dk[i])] = dict[dk[i]] end # convert string and mixed keys into symbols
         end
 
         return dict_c 
