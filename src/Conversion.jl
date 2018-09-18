@@ -16,7 +16,10 @@ module Conversion
         if typeof(dk) == Array{Symbol,1} t = "t_symbol" end
         if typeof(dk) == Array{Any,1} t = "t_mixed" end # check if keys are mix of strings and symbols
         
-        dict_c = Dict()
+        dict_c = nothing
+        if t == "t_symbol" dict_c = Dict{String, Any}()
+        else dict_c = Dict{Symbol, Any}() end
+
         for i in 1:length(dk)
             try
                 if t == "t_string" dict_c[Symbol(dk[i])] = dict[dk[i]] end
