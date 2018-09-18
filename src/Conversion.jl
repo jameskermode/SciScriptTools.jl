@@ -11,15 +11,13 @@ module Conversion
     """
     function dict_convert_keys(dict)
         
-        dk = dict.keys
+        dk = collect(keys(dict))
         if typeof(dk) == Array{String,1} t = "t_string" end
         if typeof(dk) == Array{Symbol,1} t = "t_symbol" end
         if typeof(dk) == Array{Any,1} t = "t_mixed" end # check if keys are mix of strings and symbols
         
         dict_c = Dict()
         for i in 1:length(dk)
-            # dict.keys have lots of `#undef` elements and will throw error onces accessed with dict.keys[i]
-            # thus avoid error with try catch block 
             try
                 if t == "t_string" dict_c[Symbol(dk[i])] = dict[dk[i]] end
                 if t == "t_symbol" dict_c[String(dk[i])] = dict[dk[i]] end
