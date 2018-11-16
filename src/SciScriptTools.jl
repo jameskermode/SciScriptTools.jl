@@ -8,5 +8,6 @@ module SciScriptTools
     include("Comparison.jl")
     include("Conversion.jl")
     include("Optimise.jl")
+    include("Stats.jl")
 
 end # module
