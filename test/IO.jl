@@ -1,7 +1,7 @@
 # Tests for IO.jl
 
 using Base.Test
-using SciScriptTools.IO: find_files
+using SciScriptTools.IO: find_files, remove_format
 
 @testset "IO" begin
     @testset "findfiles" begin
@@ -17,6 +17,9 @@ using SciScriptTools.IO: find_files
 
     list = find_files("IO"; suffix="jl", path="../src/")
     @test length(find("IO.jl" .== list)) == 1
+
+    str = remove_format("IO.jl")
+    @test str == "IO"
 
     end
 end
