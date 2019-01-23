@@ -146,13 +146,22 @@ module ArrayProperty
     """
     function converged_mean(x::Array{Float64}; tol = 1e-5, width = 10)
 
-        x_con = mean(x[length(x)-width:length(x)])
+        # indices of x array which are less than tolerance, towards end of the array
+        # target_value : value to compare to
+        function inds_lt_tol(x, target_value, tol)
+            # why findlast and not findfirst
+            # want values towards the end of the array, not any near the start that may still meet the tolerance
+            ind = findlast(abs.(x .- target_value) .>= tol)
+            inds = collect(ind+1:length(x))
+            # can not deal with exactly zero values as it would be less than the tolerance
+            # so skip over these values
+            # Note: not a great solution, maybe look at mean of values before and after, until not zero?
+            inds = inds[find(x[inds] .!= 0.0)]
+            return inds
+        end
 
-        inds = find(abs.(x .- mean(x[length(x)-width:length(x)])) .<= tol)
-        # can not deal with exactly zero values as it would be less than the tolerance
-        # so skip over these values
-        # Note: not a great solution, maybe look at mean of values before and after, until not zero?
-        inds = inds[find(x[inds] .!= 0.0)]
+        x_con = mean(x[length(x)-width:length(x)])
+        inds = inds_lt_tol(x, x_con, tol)
         if length(inds) != 0
                 return x[inds[1]], inds[1]
         end
@@ -160,8 +169,7 @@ module ArrayProperty
         for i in length(x)-width+1:length(x)-1
             w = length(x) - i
             x_con = mean(x[length(x)-w:length(x)])
-            inds = find(abs.(x .- x_con) .<= tol)
-            inds = inds[find(x[inds] .!= 0.0)] # ignore as comment above
+            inds = inds_lt_tol(x, x_con, tol)
             if length(inds) != 0
                 warn("Changed mean wdith: ", w)
                 warn("New target x: ", x_con)
