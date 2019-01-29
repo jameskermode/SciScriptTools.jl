@@ -2,7 +2,7 @@ module IO
 
     using Logging: debug, info, error
 
-    export create_dir, find_files, remove_format
+    export create_dir, find_files
 
     """
     `create_dir(path::String)`
@@ -65,17 +65,6 @@ module IO
         end
 
         return filenames
-    end
-
-# remove file extension and dot (-1)
-    """
-    `remove_format(filename::AbstractString)`
-
-    Remove file extension and dot from filename.
-    """
-    function remove_format(filename::AbstractString)
-        filename_inds = 1:(findlast(".", filename)-1)[1]
-        return filename[filename_inds]
     end
 
 end # module
