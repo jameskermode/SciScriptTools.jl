@@ -37,7 +37,7 @@ module IO
 
         with_path = false # flag for whether prefix came with a path or not
         path = dirname(prefix)
-        if path != "" with_path = true end
+        if path != "" with_path = true
         elseif path == "" path = pwd() end
         prefix = basename(prefix)
         list = readdir(path)
