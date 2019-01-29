@@ -32,12 +32,14 @@ module IO
 
     ### Optional Arguments
     `suffix::AbstractString=""` : end of the filename, eg file format
-    `path::AbstractString=""` : to perform function not in present working directory
     """
-    function find_files(prefix::AbstractString=""; suffix::AbstractString="",
-                path::AbstractString="")
+    function find_files(prefix::AbstractString=""; suffix::AbstractString="")
 
-        if path == "" path = pwd() end
+        with_path = false # flag for whether prefix came with a path or not
+        path = dirname(prefix)
+        if path != "" with_path = true end
+        elseif path == "" path = pwd() end
+        prefix = basename(prefix)
         list = readdir(path)
         m_str = ""
 
@@ -55,6 +57,11 @@ module IO
             if match(Regex(m_str), list[i]) != nothing
                 push!(filenames, list[i])
             end
+        end
+
+        # joinpath() will actually ignore if path == "", keep if for logically reasoning and large lists
+        if with_path == true
+            [filenames[i] = joinpath(path, filenames[i]) for i in 1:length(filenames)]
         end
 
         return filenames
