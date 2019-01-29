@@ -44,11 +44,11 @@ module IO
         m_str = ""
 
         if prefix != "" && suffix != ""
-            m_str = string(prefix, "(.+)", suffix)
+            m_str = string("^", prefix, "(.+)", suffix, "\$")
         elseif prefix != ""
-            m_str = string(prefix, "(.+)")
+            m_str = string("^", prefix, "(.+)")
         elseif suffix != ""
-            m_str = string("(.+)", suffix)
+            m_str = string("(.+)", suffix, "\$")
         else error("Need to provide at least a prefix or suffix") end
 
         info(@sprintf("Looking for files with form: %s ", m_str))
