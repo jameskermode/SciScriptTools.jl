@@ -41,23 +41,17 @@ module IO
         elseif path == "" path = pwd() end
         prefix = basename(prefix)
         list = readdir(path)
-        m_str = ""
+        inds_b = nothing
 
         if prefix != "" && suffix != ""
-            m_str = string("^", prefix, "(.+)", suffix, "\$")
+            inds_b = startswith.(list, prefix) .* endswith.(list, suffix)
         elseif prefix != ""
-            m_str = string("^", prefix, "(.+)")
+            inds_b = startswith.(list, prefix)
         elseif suffix != ""
-            m_str = string("(.+)", suffix, "\$")
+            inds_b = endswith.(list, suffix)
         else error("Need to provide at least a prefix or suffix") end
 
-        info(@sprintf("Looking for files with form: %s ", m_str))
-        filenames = Array{String}([])
-        for i in 1:length(list)
-            if match(Regex(m_str), list[i]) != nothing
-                push!(filenames, list[i])
-            end
-        end
+        filenames = list[inds_b]
 
         # joinpath() will actually ignore if path == "", keep if for logically reasoning and large lists
         if with_path == true
