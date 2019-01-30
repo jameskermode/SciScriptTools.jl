@@ -25,7 +25,6 @@ module IO
     `find_files(prefix::AbstractString=""; suffix::AbstractString="", path::AbstractString="")`
 
     Find files of a given prefix and/or suffix.
-    Note: Will not handle entire filenames, only partial names.
 
     ### Arguments
     `prefix::AbstractString=""` : start of the filename
