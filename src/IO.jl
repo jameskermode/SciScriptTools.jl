@@ -1,8 +1,9 @@
 module IO
 
     using Logging: debug, info, error
+    using JSON: print
 
-    export create_dir, find_files
+    export create_dir, find_files, write_json
 
     """
     `create_dir(path::String)`
@@ -58,6 +59,15 @@ module IO
         end
 
         return filenames
+    end
+
+    "Write a dictionary to a json file"
+    function write_json(filename::AbstractString, dict::Dict)
+
+        json_file = open(filename, "w")
+        print(json_file, dict)
+        close(json_file)
+        return 0
     end
 
 end # module
