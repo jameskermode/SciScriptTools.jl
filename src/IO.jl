@@ -61,7 +61,11 @@ module IO
         return filenames
     end
 
-    "Write a dictionary to a json file"
+    """
+    `write_json(filename::AbstractString, dict::Dict)`
+
+    Write a dictionary to a json file
+    """
     function write_json(filename::AbstractString, dict::Dict)
 
         json_file = open(filename, "w")
