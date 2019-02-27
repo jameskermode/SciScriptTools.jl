@@ -78,6 +78,7 @@ module IO
     # could not get hdf5 to work on some variables I was using, should have function for formart .h5
     """
     `save_data(filename::AbstractString, variable; format::AbstractString=".json", dir::AbstractString="")`
+    `save_data(args::AbstractString...; format::AbstractString=".json", dir::AbstractString="")`
 
     Save a variable to file
 
