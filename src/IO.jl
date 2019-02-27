@@ -81,6 +81,10 @@ module IO
 
     Save a variable to file
 
+    ### Usage
+    save_data("a", 1, dir="data")
+    save_data("a", 1, "b", 2, dir="data")
+
     ### Arguments
     - `filename::AbstractString`
     - `variable` : variable to save in file
@@ -104,6 +108,19 @@ module IO
         dict = Dict("v" => variable)
         write_json(fn, dict)
         return 0
+    end
+    function save_data(args...; format::AbstractString=".json", dir::AbstractString="")
+
+        if iseven(length(args)) != true
+            error("Need name and variable pairs")
+            return 1
+        end
+
+        for n in 1:Int(length(args)/2.0)
+            @show args[n]
+            @show args[n+1]
+            save_data(args[(2*n)-1], args[(2*n)]; format=format, dir=dir)
+        end
     end
 
     """
