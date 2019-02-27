@@ -2,7 +2,7 @@ module Conversion
 
     using Logging: debug
 
-    export dict_convert_keys, dict_to_arrays, pair_to_list
+    export dict_convert_keys, dict_to_arrays, convert_dict_type, pair_to_list
 
     # Logging
     # to display logging levels, use
@@ -69,6 +69,23 @@ module Conversion
         # returning `key_order` is redundent when optional argument for `key_order` is provided
         # rather than just return `arrays`, keep the consistency of always returning the same number of objects
         return arrays, key_order
+    end
+
+    """
+    `convert_dict_type!(dict::Dict, t, args...)`
+
+    Convert data type of data within a dictionary.
+    Useful for when read in dictionaries from file do not have the correct type.
+
+    ### Arguments
+    - `dict::Dict` : dictionary
+    - `t` : type to convert to
+    - `args...` : dictionary keys to convert
+    """
+    function convert_dict_type!(dict::Dict, t, args...)
+        for i in 1:length(args)
+            dict[args[i]] = t(dict[args[i]])
+        end
     end
 
     """
