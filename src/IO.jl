@@ -1,9 +1,9 @@
 module IO
 
     using Logging: debug, info, error
-    using JSON: print
+    using JSON: parsefile, print
 
-    export create_dir, find_files, write_json
+    export create_dir, find_files, write_json, save_data, load_data
 
     """
     `create_dir(path::String)`
@@ -72,6 +72,34 @@ module IO
         print(json_file, dict)
         close(json_file)
         return 0
+    end
+
+    """
+    `save_data(filename::AbstractString, variable)`
+
+    Save a variable to file
+
+    ### Arguments
+    - `filename::AbstractString`
+    - `variable`
+    """
+    function save_data(filename::AbstractString, variable)
+        dict = Dict("v" => variable)
+        write_json(filename, dict)
+        return 0
+    end
+
+    """
+    `load_data(filename::AbstractString)`
+
+    Load a variable from a file
+
+    ### Arguments
+    - `filename::AbstractString`
+    """
+    function load_data(filename::AbstractString)
+        d = parsefile(filename)
+        return d["v"]
     end
 
 end # module
