@@ -109,7 +109,7 @@ module IO
         write_json(fn, dict)
         return 0
     end
-    function save_data(args...; format::AbstractString=".json", dir::AbstractString="")
+    function save_data(args::AbstractString...; format::AbstractString=".json", dir::AbstractString="")
 
         if iseven(length(args)) != true
             error("Need name and variable pairs")
@@ -125,15 +125,34 @@ module IO
 
     """
     `load_data(filename::AbstractString)`
+    `load_data(args::AbstractString...; dir::AbstractString="")`
 
     Load a variable from a file
 
+    ### Usage
+    a = load_data("a")
+    a, b = load_data("a", "b"; dir="data")
+
     ### Arguments
     - `filename::AbstractString`
+
+    ### Optional Arguments
+    - `dir::AbstractString=""` : separate directory argument, if not given in filename
     """
-    function load_data(filename::AbstractString)
-        d = parsefile(filename)
+    function load_data(filename::AbstractString; dir::AbstractString="")
+
+        fn = filename
+        if dir != "" fn = joinpath(dir, fn) end
+        d = parsefile(fn)
         return d["v"]
+    end
+    function load_data(args::AbstractString...; dir::AbstractString="")
+
+        vars = Array{Any}(length(args))
+        for i in 1:length(vars)
+            vars[i] = load_data(args[i]; dir=dir)
+        end
+        return vars
     end
 
 end # module
