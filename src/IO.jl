@@ -74,6 +74,8 @@ module IO
         return 0
     end
 
+    # save and load uses .json for portabilty across languages
+    # could not get hdf5 to work on some variables I was using, should have function for formart .h5
     """
     `save_data(filename::AbstractString, variable)`
 
