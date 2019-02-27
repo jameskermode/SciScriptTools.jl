@@ -77,17 +77,32 @@ module IO
     # save and load uses .json for portabilty across languages
     # could not get hdf5 to work on some variables I was using, should have function for formart .h5
     """
-    `save_data(filename::AbstractString, variable)`
+    `save_data(filename::AbstractString, variable; format::AbstractString=".json", dir::AbstractString="")`
 
     Save a variable to file
 
     ### Arguments
     - `filename::AbstractString`
-    - `variable`
+    - `variable` : variable to save in file
+
+    ### Optional Arguments
+    - `format::AbstractString=".json"` : format of file (currently not much use, always writes to .json)
+    - `dir::AbstractString=""` : separate directory argument, if not given in filename
+
     """
-    function save_data(filename::AbstractString, variable)
+    function save_data(filename::AbstractString, variable; format::AbstractString=".json", dir::AbstractString="")
+
+        fn = filename
+
+        # find if file extension given, if not then add
+        inds = findlast(".", fn)
+        if length(collect(inds)) == 0 fn = string(filename, format) end
+
+        # add directory if given as keyword arg
+        if dir != "" fn = joinpath(dir, fn) end
+
         dict = Dict("v" => variable)
-        write_json(filename, dict)
+        write_json(fn, dict)
         return 0
     end
 
