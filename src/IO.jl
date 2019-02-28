@@ -23,7 +23,7 @@ module IO
     end
 
     """
-    `find_files(prefix::AbstractString=""; suffix::AbstractString="", path::AbstractString="")`
+    `find_files(prefix::AbstractString = ""; suffix::AbstractString = "")`
 
     Find files of a given prefix and/or suffix.
 
@@ -33,7 +33,7 @@ module IO
     ### Optional Arguments
     `suffix::AbstractString=""` : end of the filename, eg file format
     """
-    function find_files(prefix::AbstractString=""; suffix::AbstractString="")
+    function find_files(prefix::AbstractString = ""; suffix::AbstractString = "")
 
         with_path = false # flag for whether prefix came with a path or not
         path = dirname(prefix)
@@ -77,8 +77,8 @@ module IO
     # save and load uses .json for portabilty across languages
     # could not get hdf5 to work on some variables I was using, should have function for formart .h5
     """
-    `save_data(filename::AbstractString, variable; format::AbstractString=".json", dir::AbstractString="")`
-    `save_data(args::AbstractString...; format::AbstractString=".json", dir::AbstractString="")`
+    `save_data(filename::AbstractString, variable; format::AbstractString = ".json", dir::AbstractString = "")`
+    `save_data(args...; format::AbstractString = ".json", dir::AbstractString = "")`
 
     Save a variable to file
 
@@ -95,7 +95,7 @@ module IO
     - `dir::AbstractString=""` : separate directory argument, if not given in filename
 
     """
-    function save_data(filename::AbstractString, variable; format::AbstractString=".json", dir::AbstractString="")
+    function save_data(filename::AbstractString, variable; format::AbstractString = ".json", dir::AbstractString = "")
 
         fn = filename
 
@@ -110,7 +110,7 @@ module IO
         write_json(fn, dict)
         return 0
     end
-    function save_data(args...; format::AbstractString=".json", dir::AbstractString="")
+    function save_data(args...; format::AbstractString = ".json", dir::AbstractString = "")
 
         if iseven(length(args)) != true
             error("Need name and variable pairs")
@@ -118,7 +118,7 @@ module IO
         end
 
         for n in 1:Int(length(args)/2.0)
-            save_data(args[(2*n)-1], args[(2*n)]; format=format, dir=dir)
+            save_data(args[(2*n)-1], args[(2*n)]; format = format, dir = dir)
         end
     end
 
