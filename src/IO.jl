@@ -123,8 +123,8 @@ module IO
     end
 
     """
-    `load_data(filename::AbstractString)`
-    `load_data(args::AbstractString...; dir::AbstractString="")`
+    `load_data(filename::AbstractString; format::AbstractString = ".json", dir::AbstractString = "")`
+    `load_data(args::AbstractString...; format::AbstractString = ".json", dir::AbstractString = "")`
 
     Load a variable from a file
 
@@ -136,20 +136,27 @@ module IO
     - `filename::AbstractString`
 
     ### Optional Arguments
+    - `format::AbstractString=".json"` : format of file (currently not much use, only reads .json)
     - `dir::AbstractString=""` : separate directory argument, if not given in filename
     """
-    function load_data(filename::AbstractString; dir::AbstractString="")
+    function load_data(filename::AbstractString; format::AbstractString = ".json", dir::AbstractString = "")
 
         fn = filename
+
+        # find if file extension given, if not then add
+        inds = findlast(".", fn)
+        if length(collect(inds)) == 0 fn = string(filename, format) end
+
+        # add directory if given as keyword arg
         if dir != "" fn = joinpath(dir, fn) end
         d = parsefile(fn)
         return d["v"]
     end
-    function load_data(args::AbstractString...; dir::AbstractString="")
+    function load_data(args::AbstractString...; format::AbstractString = ".json", dir::AbstractString = "")
 
         vars = Array{Any}(length(args))
         for i in 1:length(vars)
-            vars[i] = load_data(args[i]; dir=dir)
+            vars[i] = load_data(args[i]; format = format, dir = dir)
         end
         return vars
     end
