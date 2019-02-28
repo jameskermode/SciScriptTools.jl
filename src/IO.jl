@@ -110,7 +110,7 @@ module IO
         write_json(fn, dict)
         return 0
     end
-    function save_data(args::AbstractString...; format::AbstractString=".json", dir::AbstractString="")
+    function save_data(args...; format::AbstractString=".json", dir::AbstractString="")
 
         if iseven(length(args)) != true
             error("Need name and variable pairs")
@@ -118,8 +118,6 @@ module IO
         end
 
         for n in 1:Int(length(args)/2.0)
-            @show args[n]
-            @show args[n+1]
             save_data(args[(2*n)-1], args[(2*n)]; format=format, dir=dir)
         end
     end
